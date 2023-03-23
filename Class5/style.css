@@ -1,0 +1,11 @@
+svg {
+    border: 1px solid #ccc;
+}
+
+.axis .domain {
+    stroke: none; /*不顯示外側黑線*/
+}
+
+.x line {
+    stroke: white; /*改變內側刻度線的顏色*/
+}
