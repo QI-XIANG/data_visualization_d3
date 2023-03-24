@@ -1,0 +1,33 @@
+body{
+    font-weight: bold; /*文字寬度*/
+    margin: 2rem;
+}
+
+h3{
+    font-weight: 100;
+    color: #555;
+    margin: 0.4rem 0;
+}
+
+svg{
+    border: 1px solid #ccc;
+}
+
+button{
+    outline: none; /*無外框線*/
+    color: #555;
+    border-color: #eee;
+    background-color: #fefefe;
+    padding: 3px 0;
+    width: 48px;
+    text-align: center;
+    transition: all 200ms;
+}
+
+button:hover{ /*滑鼠移入按鈕後的顏色*/
+    background-color: lightgoldenrodyellow;
+}
+
+button:focus{ /*點擊按鈕後的按鈕顏色*/
+    background-color: lightpink;
+}
