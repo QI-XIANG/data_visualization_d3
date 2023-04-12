@@ -1,7 +1,7 @@
-/*d3.csv("../data/movies.csv").then((res) => {
+d3.csv("../data/movies.csv").then((res) => {
     console.log(res);
     //debugger; 用來抓住區域變數，不然原則上執行完這行，在瀏覽器console裡面res會變成undefined
-});*/
+});
 
 //字串處理，將NA換成undefined，其餘則保持原string
 const parseNA = string => (string === 'NA' ? "undifined" : string); //匿名函式
@@ -39,7 +39,7 @@ function type(d){
 }
 
 //d3.csv的第2個參數可以給定資料預處理方法
-//d3.csv("../data/movies.csv",type).then((res) => console.log(res));
+d3.csv("../data/movies.csv",type).then((res) => console.log(res));
 
 //data filter
 function filterData(data){
