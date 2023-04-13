@@ -1,20 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body style="background-color: wheat;">
-    <h1 style="text-align: center;">Data Visualization: <a href="https://www.kaggle.com/datasets/canggih/anime-data-score-staff-synopsis-and-genre" target="_blank" style="text-decoration: none;">Anime Data</a></h1>
+
+    <h1 style="text-align: center;">Data Visualization: <a
+            href="https://www.kaggle.com/datasets/canggih/anime-data-score-staff-synopsis-and-genre" target="_blank"
+            style="text-decoration: none;">Anime Data</a></h1>
+
     <div style="display: flex;justify-content: center;">
         <div style="overflow: auto;" class="bar-chart-container"></div>
     </div>
-    <div class="footer">
+
+    <div style="display: flex;justify-content: center;">
+        <div class="bar-chart-container2" style="overflow: auto;"></div>
+    </div>
+    <div class="controls" style="display: flex;justify-content: center;opacity: 0;">
+        <div>
+            <button data-name="Favorites">Favorite</button>
+            <button data-name="Members">Member</button>
+            <button data-name="Scored_by">Scored By</button>
+        </div>
+    </div>
+
+    <div class="tooltip">
+        <div class="tip-header">
+            <h3></h3>
+        </div>
+        <div class="tip-body"></div>
+    </div>
+
+    <div id="preloader"></div>
+
+    <div style="margin-top: 30px;display: flex;justify-content: center;">
+        <div class="table">
+            <div class="table-header">
+                <div class="header__item"><a id="name" class="filter__link">Attribute</a></div>
+                <div class="header__item"><a id="wins" class="filter__link filter__link--number">Meaning</a></div>
+            </div>
+            <div class="table-content">
+                <div class="table-row">
+                    <div class="table-data">Broadcast Time</div>
+                    <div class="table-data">動畫在一週的哪天播出</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Duration</div>
+                    <div class="table-data">動畫每集的播放長度</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Episodes</div>
+                    <div class="table-data">動畫播放的總集數</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Favorites</div>
+                    <div class="table-data">動畫被收藏的次數</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Genre</div>
+                    <div class="table-data">動畫的主要類型</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Licensors</div>
+                    <div class="table-data">動畫發行的版權擁有者</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Members</div>
+                    <div class="table-data">動畫的討論人氣</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Producers</div>
+                    <div class="table-data">動畫製作的出資者</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Rating</div>
+                    <div class="table-data">動畫的分級</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Score</div>
+                    <div class="table-data">動畫的評分</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Scored By</div>
+                    <div class="table-data">動畫評分的參與人數</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Sources</div>
+                    <div class="table-data">動畫的改編來源</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Start Season</div>
+                    <div class="table-data">動畫的播放季度</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Studios</div>
+                    <div class="table-data">負責動畫製作的工作室</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-data">Type</div>
+                    <div class="table-data">動畫的播放類型</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="footer" style="opacity: 0;">
         <p style="text-align: center;padding-top: 50px;">View with computer to get better user experience :)</p>
-    </div> 
+        <p style="text-align: center;padding-top: 5px;">&copy; 2023 By Qi-Xiang Zhang.<br>Proudly created with D3.js.
+        </p>
+    </div>
+
 </body>
 <script src="//unpkg.com/d3"></script>
 <script src="./main.js"></script>
+<script src="./main2.js"></script>
+<link href="./style.css" rel="stylesheet">
+<link href="./preloader.css" rel="stylesheet">
+<link href="./tableDecoration.css" rel="stylesheet">
 </html>

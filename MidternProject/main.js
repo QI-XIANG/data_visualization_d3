@@ -68,7 +68,7 @@ function prepareBarChartData(data) {
 }
 
 //設定資料呈現的畫布
-function setupCanvas(barchartData) {
+function setupCanvas1(barchartData) {
     const svg_width = 800; //畫布寬度
     const svg_height = 600; //畫布高度
     const chart_margin = { top: 80, right: 40, bottom: 40, left: 80 }; //畫布離邊緣的距離
@@ -111,7 +111,7 @@ function setupCanvas(barchartData) {
         .attr('x', d => X_scale(d.Start_Year))
         .attr('y', d => Y_scale(d.Count))
         .attr('width', X_scale.bandwidth())
-        .attr('height', d => chart_height - Y_scale(d.Count)) //bandwidth() 取得bar的寬度
+        .attr('height', d => chart_height - Y_scale(d.Count))//bandwidth() 取得bar的寬度
         .style('fill', 'dodgerblue'); //決定bar的顏色
      
     this_svg.selectAll(".group")
@@ -126,9 +126,12 @@ function setupCanvas(barchartData) {
     const header = this_svg.append('g').attr('class', 'bar-header')
         .attr('transform', `translate(0,${-(chart_margin.top / 2)})`)
         .append('text');
-    header.append('tspan').text('Number of Animation by Year');
+    header.append('tspan').text('Number of Animations by Year');
     header.append('tspan').text('Year: 2000-2018')
         .attr('x', 0).attr('y', 20).style('font-size', '0.8em').style('fill', '#555');
+
+    const defaultDelay = 1000;
+    const transitionDelay = d3.transition().duration(defaultDelay);
 
     //新增刻度
     //axisTop 產生圖表頂部的刻度
@@ -148,6 +151,7 @@ function setupCanvas(barchartData) {
     
     //set the size of the ticks 同時設定 tickSizeInner tickSizeOuter
     xAxisDraw.selectAll('text').attr('font-size', '1em')
+    
     const yAxis = d3.axisLeft(Y_scale);
     const yAxisDraw = this_svg.append('g')
         .attr('class', 'y axis')
@@ -159,11 +163,9 @@ function setupCanvas(barchartData) {
         .attr("text-anchor", "end")
         .attr("fill", "black")
         .attr("font-size","0.9rem")
-        .text("Number of Animation");
+        .text("Number of Animations");
     //The dx attribute indicates a shift along the x-axis on the position of an element or its content.
     yAxisDraw.selectAll('text').attr('dx', '-0.6em')
-
-
 
 }
 
@@ -181,12 +183,11 @@ function ready(animation) {
             return d3.ascending(a.Start_Year, b.Start_Year);//return compare function 用來比較a、b大小的函數
         }
     );
-    setupCanvas(barchartData);
+    setupCanvas1(barchartData);
 }
 
 //d3.csv的第2個參數可以給定資料預處理方法
 d3.csv("dataanime.csv", type).then((res) => {
     console.log(res);
     ready(res);
-
 });
