@@ -7,24 +7,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-
+<script src="//unpkg.com/d3"></script>
 <body style="background-color: wheat;">
 
-    <h1 style="text-align: center;">Data Visualization: <a
+    <h1 style="text-align: center;font-size: 36px;padding-top: 20px;">Data Visualization: <a
             href="https://www.kaggle.com/datasets/canggih/anime-data-score-staff-synopsis-and-genre" target="_blank"
             style="text-decoration: none;">Anime Data</a></h1>
 
-    <div style="display: flex;justify-content: center;">
-        <div style="overflow: auto;" class="bar-chart-container"></div>
+    <div style="margin-top:50px;">
+        <div>
+            <h2 style="text-align: center;font-size: 24px;">Pie Chart : Animations by Genre</h2>
+            <h3 style="text-align: center;padding: 10px 0 25px 0;font-size: 16px;">Year from 2000 to 2018</h3>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <div class="pie_chart" style="overflow: auto;"></div>
+        </div>
     </div>
 
-    <div style="display: flex;justify-content: center;">
-        <div class="bar-chart-container2" style="overflow: auto;"></div>
+    <div style="margin-top:50px;">
+        <div>
+            <h2 style="text-align: center;font-size: 24px;">Bar Chart 1 : Animations by Year</h2>
+            <h3 style="text-align: center;padding: 10px 0 5px 0;font-size: 16px;">Year from 2000 to 2018</h3>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <div style="overflow: auto;" class="bar-chart-container"></div>
+        </div>
+    </div>
+
+    <div style="margin-top:50px;">
+        <div>
+            <h2 class="bar-chart2-title" style="text-align: center;font-size: 24px;">Bar Chart 2 : Animations by Favorites</h2>
+            <h3 style="text-align: center;padding: 10px 0 5px 0;font-size: 16px;">Year from 2000 to 2018</h3>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <div class="bar-chart-container2" style="overflow: auto;"></div>
+        </div>
     </div>
     <div class="controls" style="display: flex;justify-content: center;opacity: 0;">
         <div>
-            <button data-name="Favorites">Favorite</button>
-            <button data-name="Members">Member</button>
+            <button data-name="Favorites">Favorites</button>
+            <button data-name="Members">Members</button>
             <button data-name="Scored_by">Scored By</button>
         </div>
     </div>
@@ -36,7 +58,12 @@
         <div class="tip-body"></div>
     </div>
 
-    <div id="preloader"></div>
+    <div style="margin-top:50px;">
+        <div>
+            <h2 style="text-align: center;font-size: 24px;">Appendix : Explanation of Attributes</h2>
+            <h3 style="text-align: center;padding: 10px 0 0 0;font-size: 16px;">Edited by Qi-Xiang</h3>
+        </div>
+    </div>
 
     <div class="table-container" style="margin-top: 30px;display: flex;justify-content: center;opacity: 0;">
         <div class="table">
@@ -109,18 +136,25 @@
         </div>
     </div>
     
+    <p style="text-align: center;padding-top: 25px;font-size: 24px;">View with computer to get better user experience :)</p>
 
-    <div class="footer" style="opacity: 0;">
-        <p style="text-align: center;padding-top: 50px;">View with computer to get better user experience :)</p>
-        <p style="text-align: center;padding-top: 5px;">&copy; 2023 By Qi-Xiang Zhang.<br>Proudly created with D3.js.
+    <div class="footer" style="opacity: 0;background-color: black;">
+        <p style="text-align: center;font-size: 40px;margin: 0;padding-top: 10px;"><a href="https://github.com/QI-XIANG" target="_blank"><i class="fa-brands fa-github" style="color: #828c89;"></i></a></p>
+        <p style="text-align: center;padding-top: 5px;margin: 0;color: aliceblue;padding-top:10px;padding-bottom: 20px;font-size: 18px;">&copy; 2023 By Qi-Xiang Zhang.<br>Proudly created with D3.js.
         </p>
     </div>
 
+    <button onclick="topFunction()" id="BtnBackToTop" title="Go to top">Top</button>
+
+    <div id="preloader"></div>
+
 </body>
-<script src="//unpkg.com/d3"></script>
-<script src="./main.js"></script>
-<script src="./main2.js"></script>
 <link href="./style.css" rel="stylesheet">
 <link href="./preloader.css" rel="stylesheet">
 <link href="./tableDecoration.css" rel="stylesheet">
+<script src="./main.js"></script>
+<script src="./main3.js"></script>
+<script src="./main2.js"></script>
+<script src="./backToTop.js"></script>
+<script src="https://kit.fontawesome.com/800089fd93.js" crossorigin="anonymous"></script>
 </html>

@@ -1,12 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 *, *:before, *:after {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
   padding: 24px;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: 'Times New Roman', serif ,'Source Sans Pro', sans-serif;
   margin: 0;
+  padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -17,9 +19,15 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 1000px;
   margin-right: auto;
   margin-left: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   min-height: 100vh;
 }
 
@@ -30,6 +38,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .table-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   width: 100%;
   background: #000;
@@ -37,19 +47,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .table-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   width: 100%;
   padding: 18px 0;
 }
+
 .table-row:nth-of-type(odd) {
   background: #f5f4f4;
 }
+
 .table-row:nth-of-type(even) {
   background: #ffffff;
 }
 
 .table-data, .header__item {
-  flex: 1 1 20%;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 20%;
+          flex: 1 1 20%;
   text-align: center;
 }
 
@@ -65,18 +81,23 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: 24px;
   padding-right: 24px;
 }
+
 .filter__link::after {
-  content: "";
+  content: '';
   position: absolute;
   right: -18px;
   color: white;
   font-size: 12px;
   top: 50%;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
+
 .filter__link.desc::after {
-  content: "(desc)";
+  content: '(desc)';
 }
+
 .filter__link.asc::after {
-  content: "(asc)";
-}/*# sourceMappingURL=tableDecoration.css.map */
+  content: '(asc)';
+}
+/*# sourceMappingURL=tableDecoration.css.map */

@@ -68,12 +68,14 @@ function setupCanvas2(barChartData, animationClean) {
         metric = this.dataset.name;
         console.log(metric);
         const thisData = choose_data(metric, animationClean);
-        update(thisData)
+        //console.log(this.innerHTML);
+        document.querySelector('.bar-chart2-title').innerHTML = `Bar Chart 2 : Animations by ${this.innerHTML}`;
+        update(thisData,this.innerHTML);
     }
 
-    d3.selectAll('button').on('click', click);
+    d3.selectAll('.controls button').on('click', click);
 
-    function update(data) {
+    function update(data,titleChange) {
         console.log(data);
 
         xMax = d3.max(data, d => d[metric]);
@@ -93,7 +95,7 @@ function setupCanvas2(barChartData, animationClean) {
         yAxisDraw.selectAll('text').attr('font-size', "1.1em");
 
         //Update Header
-        header.select('tspan').text(`Top 15 Animations by ${metric}`);
+        header.select('tspan').text(`Top 15 Animations by ${titleChange}`);
 
         //Update Bar 
         bars.selectAll('.bar2').data(data, d => d["Title"]).join(
@@ -124,10 +126,12 @@ function setupCanvas2(barChartData, animationClean) {
                 ['Duration', thisBarData['Duration']],
                 ['Episodes', thisBarData['Episodes']],
                 ['Genre', thisBarData['Genre']],
-                ['Licensors', cutText(thisBarData['Licensors'])],
-                ['Members', thisBarData['Members']],
                 ['Producers', cutText(thisBarData['Producers'])],
+                ['Licensors', cutText(thisBarData['Licensors'])],
+                ['Favorites', thisBarData['Favorites']],
+                ['Members', thisBarData['Members']],
                 ['Rating', thisBarData['Rating']],
+                ['Score', thisBarData['Score']],
                 ['Scored By', thisBarData['Scored_by']],
                 ['Sources', thisBarData['Sources']],
                 ['Start Season', thisBarData['Start_Season']],
@@ -196,7 +200,7 @@ function setupCanvas2(barChartData, animationClean) {
     let yAxis = d3.axisLeft(Y_scale).tickSize(0);
     let yAxisDraw = this_svg.append('g').attr('class', 'y axis2')
 
-    update(barChartData);
+    update(barChartData,"Favorites");
 
 }
 
