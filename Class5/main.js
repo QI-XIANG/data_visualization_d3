@@ -124,7 +124,7 @@ function setupCanvas(barchartData) {
 
     //Draw header 新增圖表的標題
     const header = this_svg.append('g').attr('class', 'bar-header')
-        .attr('transform', `translate(0,${-(chart_margin.top / 2)})`)
+        .attr('transform', `translate(0,${-(chart_margin.top / 2)})`) //向上平移
         .append('text');
     header.append('tspan').text('Total revenue by genre in $US');
     header.append('tspan').text('Year: 2000-2009')
