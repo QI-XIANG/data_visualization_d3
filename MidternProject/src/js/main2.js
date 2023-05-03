@@ -39,12 +39,15 @@ function filterData(data) {
     )
 }
 
-//choose specific data
+//上面的2個方法都與main.js中的方法相同
+
+//choose specific data，僅選擇依特定權重排列的最前面15筆資料
 function choose_data(metric, animationClean) {
     const thisData = animationClean.sort((a, b) => b[metric] - a[metric]).filter((d, i) => i < 15);
     return thisData;
 }
 
+//調整刻度顯示的單位表示方式
 function formatTicks(d) {
     /*d3.format("s")(1500);  // "1.50000k"
       d3.format("~s")(1500); // "1.5k"*/
@@ -55,42 +58,51 @@ function formatTicks(d) {
         .replace('T', 'T')
 }
 
+//調整過長的字串
 function cutText(string) {
     return string.length < 35 ? string : string.substring(0, 35) + "...";
 }
 
 //barchartData: 實際繪圖需要的資料
+//設定資料呈現的畫布，決定圖表該如何呈現
 function setupCanvas2(barChartData, animationClean) {
 
-    let metric = "Favorites"
+    let metric = "Favorites" //用來決定排序依據的初始權重屬性
 
+    //定義事件處理方法
     function click() {
-        metric = this.dataset.name;
-        console.log(metric);
+        metric = this.dataset.name; //取得網頁元素上的自訂屬性
+        console.log(metric); //偵錯
+        //選出依權重屬性排列的前15筆資料
         const thisData = choose_data(metric, animationClean);
         //console.log(this.innerHTML);
+        //動態修改當前段落標題
         document.querySelector('.bar-chart2-title').innerHTML = `Bar Chart 2 : Animations by ${this.innerHTML}`;
+        //動態更新網頁上顯示的圖表
         update(thisData,this.innerHTML);
     }
 
+    //在controls的按鈕上註冊事件監聽器
     d3.selectAll('.controls button').on('click', click);
 
+    //定義重新繪製(更新)圖表的方法
     function update(data,titleChange) {
-        console.log(data);
+        console.log(data);//偵錯
 
-        xMax = d3.max(data, d => d[metric]);
+        xMax = d3.max(data, d => d[metric]);//計算x軸的最大值
         X_scale = d3.scaleLinear([0, xMax], [0, barchart_width])
 
         Y_scale = d3.scaleBand().domain(data.map(d => d["Title"]))
             .rangeRound([0, barchart_height]).paddingInner(0.25);
 
-        const defaultDelay = 1000;
+        const defaultDelay = 1000;//漸變的時間
         const transitionDelay = d3.transition().duration(defaultDelay);
 
         //Update axis
         xAxisDraw.transition(transitionDelay).call(xAxis.scale(X_scale));
         yAxisDraw.transition(transitionDelay).call(yAxis.scale(Y_scale));
 
+        //座標軸文字的位置、大小設定
         yAxisDraw.selectAll('text').attr('dx', "-0.6em");
         yAxisDraw.selectAll('text').attr('font-size', "1.1em");
 
@@ -99,29 +111,30 @@ function setupCanvas2(barChartData, animationClean) {
 
         //Update Bar 
         bars.selectAll('.bar2').data(data, d => d["Title"]).join(
-            enter => {
+            enter => { //初始資料進入
                 enter.append('rect').attr('class', 'bar2').attr("x", 0)
                     .attr('y', d => Y_scale(d['Title'])).attr("height", Y_scale.bandwidth())
                     .style('fill', 'dodgerblue').transition(transitionDelay)
                     .delay((d, i) => i * 20).attr('width', d => X_scale(d[metric])).style('dodgerblue');
             },
-            update => {
+            update => { //新資料進入
                 update.transition(transitionDelay).delay((d, i) => i * 20)
                     .attr('y', d => Y_scale(d["Title"])).attr("width", d => X_scale(d[metric]));
             },
-            exit => {
+            exit => { //有資料離開
                 exit.transition().duration(defaultDelay / 2).style('fill-opacity', 0).remove();
             }
 
         )
 
-        //tooltip
+        //tooltip 資訊窗
         const tip = d3.select('.tooltip');
 
+        //滑鼠進入Bar會顯示特定的動畫詳細資訊
         function mouseoverTip(e) {
             //get data
             const thisBarData = d3.select(this).data()[0];
-            const detailData = [
+            const detailData = [ //定義顯示的動畫詳細資訊要呈現的資料
                 ['Broadcast Time', thisBarData['Broadcast_time']],
                 ['Duration', thisBarData['Duration']],
                 ['Episodes', thisBarData['Episodes']],
@@ -139,7 +152,7 @@ function setupCanvas2(barChartData, animationClean) {
                 ['Type', thisBarData['Type']],
             ]
 
-
+            //動畫詳細資訊的一些格式設定
             tip.style('left', (e.clientX + 18) + 'px')
                 .style('top', e.clientY + 'px')
                 .transition().style('opacity', 0.98);
@@ -150,35 +163,38 @@ function setupCanvas2(barChartData, animationClean) {
                 .join('p').attr('class', 'tip-info').html(d => `${d[0]} : ${d[1]}`);
         }
 
+        //滑鼠在Bar上移動的事件處理
         function mousemoveTip(e) {
             tip.style('left', (e.clientX + 18) + 'px')
                 .style('top', e.clientY + 'px')
                 .style('opacity', 0.98);
         }
 
+        //滑鼠離開Bar的事件處理
         function mousemoutTip(e) {
             tip.transition().style('opacity', 0);
         }
 
 
-
-        //interactive 新增監聽
+        //interactive 新增事件監聽處理器(顯示動畫詳細資訊)
         d3.selectAll('.bar2').on('mouseover', mouseoverTip)
             .on('mousemove', mousemoveTip)
             .on('mouseout', mousemoutTip);
 
     }
 
-    const svg_width = 1000;
+    //畫布尺寸
+    const svg_width = 1000; 
     const svg_height = 650;
     const barchart_margin = { top: 100, right: 80, bottom: 40, left: 200 };
+    //圖表實際尺寸
     const barchart_width = svg_width - (barchart_margin.left + barchart_margin.right);
     const barchart_height = svg_height - (barchart_margin.top + barchart_margin.bottom);
     const this_svg = d3.select('.bar-chart-container2')
         .append('svg').attr('width', svg_width)
         .attr('height', svg_height).append('g')
         .attr('transform', `translate(${barchart_margin.left},${barchart_margin.top})`);
-
+    
     let xMax = d3.max(barChartData, d => d[metric]);
     let X_scale = d3.scaleLinear([0, xMax], [0, barchart_width])
 
@@ -200,27 +216,14 @@ function setupCanvas2(barChartData, animationClean) {
     let yAxis = d3.axisLeft(Y_scale).tickSize(0);
     let yAxisDraw = this_svg.append('g').attr('class', 'y axis2')
 
-    update(barChartData,"Favorites");
+    update(barChartData,"Favorites");//繪製初始權重的圖表
 
 }
 
-d3.csv("dataanime.csv", type).then((res) => {
+//載入資料(包含資料前處理)並繪製圖表
+d3.csv("./dataset/dataanime.csv", type).then((res) => {
     const animationClean = filterData(res)
     let barChartData = choose_data("Favorites", animationClean);
     console.log(choose_data("favorites", animationClean));
     setupCanvas2(barChartData, animationClean);
 });
-
-/*載入中圖示*/
-let preloader = document.querySelector("#preloader");
-let footer = document.querySelector(".footer");
-let controls = document.querySelector(".controls");
-let table_container = document.querySelector(".table-container");
-if (preloader) {
-    window.addEventListener("load", () => {
-        preloader.remove();
-        footer.style.opacity = "1.0";
-        controls.style.opacity = "1.0";
-        table_container.style.opacity = "1.0";
-    });
-}

@@ -121,19 +121,16 @@ function preparePieChartData(data) {
     const dataArry = Array.from(dataMap, d => ({ Genre: d[0], Count: d[1] }));
     const data_sort = dataArry.sort( (a,b) => b["Count"] - a["Count"]);
     let data_other_sumation = 0;
-    data_sort.slice(5,).forEach(e=>{
+    data_sort.slice(5,).forEach(e=>{ //統計除前4大類型動畫外的數量
         data_other_sumation += e["Count"];
     })
-    let slice_data = data_sort.slice(5,);
-    slice_data.push({"Genre":"Other","Count":data_other_sumation});
     dataArry.push({"Genre":"Other","Count":data_other_sumation});
-    console.log(slice_data);
     const pie_data = dataArry.sort( (a,b) => b["Count"] - a["Count"]).filter((d, i) => i < 5);
     return pie_data;
 }
 
 //d3.csv的第2個參數可以給定資料預處理方法
-d3.csv("dataanime.csv", type).then((res) => {
+d3.csv("./dataset/dataanime.csv", type).then((res) => {
   const animationClean = filterData(res);
   const final_pieData = preparePieChartData(animationClean);
 

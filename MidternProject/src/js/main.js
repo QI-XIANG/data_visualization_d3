@@ -1,16 +1,18 @@
+
 //字串處理，將-換成undefined，其餘則保持原string
-const parseNA = string => (string === '-' ? "undifined" : string); //匿名函式
+const parseNA = string => (string === '-' ? "undefined" : string); //匿名函式
 
 //放送星期處理
-const parseWeek = string => ((string === '-' | string === "Not scheduled once per week") ? "undifined" : String(string).split(" ")[0]); //匿名函式
+const parseWeek = string => ((string === '-' | string === "Not scheduled once per week") ? "undefined" : String(string).split(" ")[0]); //匿名函式
 
 //日期處理
-const parseDate = string => (string === '-' ? "undifined" : String(string).split("-")[0]); //匿名函式
+const parseDate = string => (string === '-' ? "undefined" : String(string).split("-")[0]); //匿名函式
+
 //上面相當於下面
 /*const parseDate = d3.timeParse("%Y-%m-%d");
 parseDate(string);*/
 
-//類型處理
+//類型處理，原始的資料類型是以,連接而成的長字串，所以需要將其分割成Array
 const parseGenres = string => String(string).split(",");
 
 // + 轉換成數字
@@ -23,6 +25,8 @@ function type(d) {
         Duration: parseNA(d["Duration"]),
         Episodes: +d["Episodes"],
         Favorites: +d["Favorites"],
+        //剛剛被切割的長字串類型Array的第1個類型(index 0)，
+        //會被當作主要類型，並以Genre代稱
         Genre: parseGenres(d["Genres"])[0],
         Genres: parseGenres(d["Genres"]),
         Licensors: parseNA(d["Licensors"]),
@@ -42,7 +46,9 @@ function type(d) {
 }
 
 
-//data filter
+//data filter，定義資料過濾器
+//在本次的作業，我們只使用介於2000~2018年的動畫資料
+//總共會涵蓋近1300筆資料
 function filterData(data) {
     return data.filter(
         d => {
@@ -61,13 +67,15 @@ function filterData(data) {
 function prepareBarChartData(data) {
     //console.log(data);
     //rollup是iterable函式會逐筆讀入資料 rollups(values, reduce, ...keys)
+    //統計各年份的動畫數量
     const dataMap = d3.rollup(data, v => d3.count(v, d => d["Score"]), d => d["Start_Year"]);
     //將array-like或iterable object轉換成array
+    //將統計出的各年度動數量轉換成Array的資料型態
     const dataArry = Array.from(dataMap, d => ({ Start_Year: d[0], Count: d[1] }))
     return dataArry;
 }
 
-//設定資料呈現的畫布
+//設定資料呈現的畫布，決定圖表該如何呈現
 function setupCanvas1(barchartData) {
     const svg_width = 800; //畫布寬度
     const svg_height = 600; //畫布高度
@@ -82,7 +90,7 @@ function setupCanvas1(barchartData) {
         .append('g').attr('transform', `translate(${chart_margin.left}, ${chart_margin.top})`);//建立圖表的群組
 
     //scale 決定水平、鉛直座標軸的分布範圍
-    const X_scale = d3.scaleBand().range([0, chart_width]).padding(0.4)
+    const X_scale = d3.scaleBand().range([0, chart_width]).padding(0.4)//padding排版
     const Y_scale = d3.scaleLinear().range([chart_height, 0]);
     const xMax = d3.max(barchartData, d => d.Count); // 找到資料當中的最大值
 
@@ -90,13 +98,13 @@ function setupCanvas1(barchartData) {
     Y_scale.domain([0, xMax]);
 
 
-    const xScale_v3 = d3.scaleLinear([0, xMax], [0, chart_width]);
+    //const xScale_v3 = d3.scaleLinear([0, xMax], [0, chart_width]);
 
     //決定鉛直方向座標軸的分布範圍
     //d3.scaleBand() 設定bar的寬度和總共要有幾個bar //domain 有幾個bar 
     //rangeRound 計算每條bar的寬度並無條件捨去小數點 //paddingInner 在bar跟bar之間設定間隔
     //map(d => d. Start_Year) 產生新陣列
-    const yScale = d3.scaleBand().domain(barchartData.map(d => d.Start_Year)).rangeRound([0, chart_height]).paddingInner(0.25);
+    //const yScale = d3.scaleBand().domain(barchartData.map(d => d.Start_Year)).rangeRound([0, chart_height]).paddingInner(0.25);
 
     //draw bars 實際繪製出所有的bar
     /*selection.data - bind elements to data 將資料與元素綁定，按照資料的比數建立對應個數的element
@@ -134,10 +142,11 @@ function setupCanvas1(barchartData) {
     const transitionDelay = d3.transition().duration(defaultDelay);
 
     //新增刻度
-    //axisTop 產生圖表頂部的刻度
+    //axisBottom 產生圖表底部的刻度
     const xAxis = d3.axisBottom(X_scale);
 
     //selection.call - call a function with this selection
+    //實際畫出x軸座標
     const xAxisDraw = this_svg.append('g').attr('class', 'x axis')
         .attr("transform", "translate(0," + chart_height + ")")
         .call(xAxis)
@@ -153,7 +162,7 @@ function setupCanvas1(barchartData) {
     xAxisDraw.selectAll('text').attr('font-size', '1em')
     
     const yAxis = d3.axisLeft(Y_scale);
-    const yAxisDraw = this_svg.append('g')
+    const yAxisDraw = this_svg.append('g')//實際畫出y軸座標
         .attr('class', 'y axis')
         .call(yAxis)
         .append("text")
@@ -169,15 +178,11 @@ function setupCanvas1(barchartData) {
 
 }
 
-
-
-
-
 //Main Function
 function ready(animation) {
     const animationClean = filterData(animation);
-    console.log(animationClean);
-    console.log(prepareBarChartData(animationClean));
+    console.log(animationClean);//用來檢視資料前處理是否有錯誤
+    console.log(prepareBarChartData(animationClean));//用來檢視資料前處理是否有錯誤
     const barchartData = prepareBarChartData(animationClean).sort( //將Array的資料進行排序(由大到小)
         (a, b) => {
             return d3.ascending(a.Start_Year, b.Start_Year);//return compare function 用來比較a、b大小的函數
@@ -187,7 +192,7 @@ function ready(animation) {
 }
 
 //d3.csv的第2個參數可以給定資料預處理方法
-d3.csv("dataanime.csv", type).then((res) => {
+d3.csv("./dataset/dataanime.csv", type).then((res) => {
     console.log(res);
     ready(res);
 });
